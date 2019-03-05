@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": false,
+        "baseUrl": "./",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "outDir": "./build",
+        "paths": {
+            "@config": [ "./src/_config/config" ],
+            "@env": [ "./src/_environments" ],
+            "@http": [ "./src/_config/http" ],
+            "@i18n": [ "./src/_translate/i18n" ],
+            "@mocks": [ "./src/_config/mocks" ],
+            "@routes": [ "./src/_config/routes" ],
+            "@/*": [ "./src/*" ],
+            "@cfg/*": [ "./src/_config/*" ],
+            "@components/*": [ "./src/components/*" ],
+            "@constants/*": [ "./src/constants/*" ],
+            "@containers/*": [ "./src/containers/*"] ,
+            "@css/*": [ "./src/_assets/css/*" ],
+            "@env/*": [ "./src/_environments/*" ],
+            "@features/*": [ "./src/features/*" ],
+            "@fonts/*": [ "./src/_assets/fonts/*" ],
+            "@helpers/*": [ "./src/helpers/*" ],
+            "@icons/*": [ "./src/_assets/icons/*" ],
+            "@img/*": [ "./src/_assets/img/*" ],
+            "@js/*": [ "./src/_assets/js/*" ],
+            "@utils/*": [ "./src/utils/*" ]
+        },
+        "sourceMap": true,
+        "target": "es5"
+    },
+    "exclude": [
+        ".docz",
+        "build",
+        "config",
+        "coverage",
+        "node_modules",
+        "public",
+        "scripts"
+    ],
+    "include": [
+        "./src/**/*"
+    ]
+}
