@@ -1,29 +1,18 @@
 # miniviewer
+[![Netlify Status](https://api.netlify.com/api/v1/badges/86cc6995-03e2-4b70-898a-22ec1d8b872f/deploy-status)](https://app.netlify.com/sites/miniviewer/deploys)
 
-## Project setup
-```
-yarn install
-```
+A minimalist app to make call's, send messages and share screen.
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+Build with:
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+- Vue
+- WebRTC
+- PeerJS
+- SASS
+- PUG
 
-### Run your tests
-```
-yarn run test
-```
+Click to se a [demo](https://miniviewer.netlify.com/)
 
-### Lints and fixes files
-```
-yarn run lint
-```
+Just have a fun.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Thanks
