@@ -4,14 +4,18 @@
         video.call__preview.js-callPreview(autoplay)
         .call__fields
             input.call__field(readonly :value='myPeerId')
-            input.call__field(placeholder='Connect to...' v-model='remotePeerId')
-            button.call__connect(@click='connect' type='button') Connect
+            input.call__field(:placeholder='$t(\'placeholders.connect\')' v-model='remotePeerId')
+            button.call__connect(@click='connect' type='button') {{ $t('buttons.connect') }}
         .call__container
             video.call__stream.js-callStream(autoplay)
             .call__messages
                 .call__messages___list
-                input.call__messages___field
-                button.call__messages___send(type='button') Send
+                    .call__messages___row(v-for='m in messages' :class='{ \'is-mine\': m.id === myPeerId }')
+                        .call__messages___message(:class='{ \'is-mine\': m.id === myPeerId }')
+                            | {{ m.message }}
+                form.call__messages___form(@submit.prevent='semdMessage')
+                    input.call__messages___field(:placeholder='$t(\'placeholders.message\')' v-model='message')
+                    button.call__messages___send(type='submit') {{ $t('buttons.send') }}
 </template>
 
 <script>
@@ -45,9 +49,17 @@ export default {
                 })
             }, error => error(error))
         })
+        this.myPeer.on('connection', con => {
+            this.connection = con
+            con.on('open', () => {
+                con.on('data', newMessage => this.messages.push(newMessage))
+            })
+        })
     },
     data: () => ({
+        connection: null,
         connecting: true,
+        message: '',
         messages: [],
         myPeer: null,
         myPeerId: '',
@@ -56,6 +68,10 @@ export default {
     methods: {
         connect() {
             if (this.remotePeerId.trim().length) {
+                this.connection = this.myPeer.connect(this.remotePeerId)
+                this.connection.on('open', () => {
+                    this.connection.on('data', newMessage => this.messages.push(newMessage))
+                })
                 const getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
                 if (getUserMedia) {
                     info('Got a UserMedia')
@@ -71,6 +87,17 @@ export default {
                     }, error => console.error(error))
                 }
             }
+        },
+        semdMessage() {
+            const newMessage = {
+                id: this.myPeerId,
+                message: this.message
+            }
+            if (this.connection) {
+                this.connection.send(newMessage)
+            }
+            this.messages.push(newMessage)
+            this.message = ''
         }
     },
     name: 'New',
@@ -79,7 +106,6 @@ export default {
             const getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
             getUserMedia({ video: true }, stream => {
                 const myPreviewVideo = document.querySelector('.js-callPreview')
-                console.log(myPreviewVideo)
                 if (myPreviewVideo) {
                     myPreviewVideo.srcObject = stream
                     info('Connected preview stream')
@@ -132,6 +158,45 @@ export default {
             flex-grow: 1
             object-fit: fill
         &__messages
+            border-left: 1px solid #dcdcdc
+            display: flex
+            flex-direction: column
+            justify-content: space-between
             width: 25vw
+            &___list
+                flex-grow: 1
+                overflow-y: scroll
+                padding: 2rem
+            &___row
+                margin-bottom: 1rem
+                text-align: left
+                &.is-mine
+                    text-align: right
+            &___message
+                display: inline-block
+                background: #dcdcdc
+                border-radius: 10px
+                color: #595959
+                padding: 1rem
+                &.is-mine
+                    background: #bfbfbf
+            &___form
+                display: flex
+            &___field
+                border: 1px solid #dcdcdc
+                border-left: none
+                border-right: none
+                color: #393939
+                padding: 1rem
+                width: 100%
+                &:focus
+                    outline: none
+            &___send
+                background: #00cc99
+                border: none
+                color: #fdfdfd
+                padding: 1rem
+                &:focus
+                    outline: none
 </style>
 
